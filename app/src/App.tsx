@@ -1,23 +1,26 @@
 import axios from "axios";
 import { useState } from "react";
 import "./App.css";
+import Razorpay from "razorpay";
+import useRazorpay, { RazorpayOptions } from "react-razorpay";
 
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
+interface PayData {
+  amount: string;
+  currency: string;
+  id: string;
 }
 
 const App = () => {
+  const Razorpay = useRazorpay();
   const [shoe, setShoe] = useState({
     name: "Training Shoes",
     creator: "Nike",
     img: "https://images.pexels.com/photos/3490360/pexels-photo-3490360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    price: 500,
+    price: 60000,
   });
 
-  const initPay = (data: any) => {
-    const options = {
+  const initPay = (data: PayData) => {
+    const options: RazorpayOptions = {
       key: "rzp_test_DPn50kPkUTWgOa",
       amount: data.amount,
       currency: data.currency,
@@ -28,7 +31,7 @@ const App = () => {
       handler: async (response: any) => {
         try {
           const verifyURL = "http://localhost:8080/api/payment/verify";
-          const data = await axios.post(verifyURL, response);
+          await axios.post(verifyURL, response);
         } catch (error) {
           console.log(error);
         }
@@ -37,7 +40,8 @@ const App = () => {
         color: "#3399cc",
       },
     };
-    const rzp1 = new window.Razorpay(options);
+    // const rzp1 = new window.Razorpay(options);
+    const rzp1 = new Razorpay(options);
     rzp1.open();
   };
 
