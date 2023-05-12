@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import "./App.css";
-import Razorpay from "razorpay";
 import useRazorpay, { RazorpayOptions } from "react-razorpay";
 
 interface PayData {
